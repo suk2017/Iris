@@ -1,49 +1,46 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CWheel : MonoBehaviour,ICInfo
-{
+public class CAxle : MonoBehaviour,ICInfo {
+
+
     //公开变量
     public float power = 100;
-    
+    public Transform decal;
+    public bool clockwise = true;//顺时针旋转还是逆时针
+
 
     //私有变量
-    private bool clockwise = true;//顺时针旋转还是逆时针
     private Transform target;//增加这个物体时使用的连接
-    private HingeJoint hj;
+    private List<FixedJoint> FJList;
 
     private Vector3 oriPos;//初始位置
     private Quaternion oriRot;//初始角度
 
-
     //加速变量
     Transform tr;
     Rigidbody rb;
-    
+
     private void Awake()
     {
         tr = transform;
         rb = GetComponent<Rigidbody>();
-        hj = new HingeJoint();
+        FJList = new List<FixedJoint>();
     }
-    
-    
+
     public void _Spawn(Transform t)
     {
         //确定目标
         target = t;
 
         //初始化姿态
-        print(target);
-        oriPos = tr.position = target.up*0 + target.position;
+        oriPos = tr.position = target.up * 0.2f + target.position;
         oriRot = tr.rotation = target.rotation;
 
         //检测周围相邻的可连接的刚体
-        hj = gameObject.AddComponent<HingeJoint>();
-        hj.connectedBody = target.parent.parent.GetComponent<Rigidbody>();//目标组件/Connection/当前物体
-        hj.axis = Vector3.up;
+        FJList.Add(gameObject.AddComponent<FixedJoint>());
+        FJList[0].connectedBody = target.parent.parent.GetComponent<Rigidbody>();
         //////判断另一方向
     }
 
@@ -69,5 +66,12 @@ public class CWheel : MonoBehaviour,ICInfo
     {
         rb.isKinematic = false;
     }
-    
+
+    private void OnMouseOver()
+    {
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            decal.position.Scale(new Vector3(0, 0, 1));
+        }
+    }
 }
