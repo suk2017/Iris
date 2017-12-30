@@ -309,6 +309,7 @@ MonoBehaviour:
   choosedObject: {fileID: 1298854280722424, guid: 2c696e36355d8ad458b5927f6af01762,
     type: 2}
   plane: {fileID: 1715661076}
+  deleteWaitFrames: 30
   mark: {fileID: 925065950}
 --- !u!4 &314275644
 Transform:
@@ -368,10 +369,30 @@ Prefab:
       propertyPath: target
       value: 
       objectReference: {fileID: 1866201028}
-    - target: {fileID: 114588858540380252, guid: df436633c99d1764f93458243ccac1eb,
+    - target: {fileID: 114970124150464380, guid: df436633c99d1764f93458243ccac1eb,
         type: 2}
-      propertyPath: keepPos
-      value: 1
+      propertyPath: min
+      value: -85
+      objectReference: {fileID: 0}
+    - target: {fileID: 114970124150464380, guid: df436633c99d1764f93458243ccac1eb,
+        type: 2}
+      propertyPath: max
+      value: 85
+      objectReference: {fileID: 0}
+    - target: {fileID: 114970124150464380, guid: df436633c99d1764f93458243ccac1eb,
+        type: 2}
+      propertyPath: clamp
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114776732563266418, guid: df436633c99d1764f93458243ccac1eb,
+        type: 2}
+      propertyPath: speed
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 114970124150464380, guid: df436633c99d1764f93458243ccac1eb,
+        type: 2}
+      propertyPath: speed
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: df436633c99d1764f93458243ccac1eb, type: 2}
@@ -1941,7 +1962,7 @@ Transform:
   m_GameObject: {fileID: 1715661074}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.25507638, y: 0, z: 5.5286083}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿#define OPE_BESIEGE
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using MyTools.roam;
@@ -51,6 +52,13 @@ public class RoamManager : MonoBehaviour
         {
             cameraMove.lockView = false;
         }
+
+    }
+
+    private void LateUpdate()
+    {
+        //鼠标位置记录 在所有操作之后
+        oriMousePos = Input.mousePosition;
     }
 
     #region 状态
@@ -64,14 +72,39 @@ public class RoamManager : MonoBehaviour
     public static float CameraDrag()
     {
         return GlobalInput.CameraDrag();
+
     }
+
+    static Vector3 oriMousePos;//上一帧的鼠标位置
     public static float verticalRotateValue()
     {
-        return GlobalInput.VerticalRotateValue();
+#if OPE_NORMAL //基本操作 直接使用鼠标移动控制视点旋转
+        return Input.GetAxis("Mouse Y");
+#elif OPE_BESIEGE//Besiege操作
+        if (Input.GetMouseButton(1))
+        {
+            return Input.GetAxis("Mouse Y");
+        }
+        else
+        {
+            return 0;
+        }
+#endif
     }
     public static float horizontalRotateValue()
     {
-        return GlobalInput.HorizontalRotateValue();
+#if OPE_NORMAL
+        return Input.GetAxis("Mouse X");
+#elif OPE_BESIEGE
+        if (Input.GetMouseButton(1))
+        {
+            return Input.GetAxis("Mouse X");
+        }
+        else
+        {
+            return 0;
+        }
+#endif
     }
     public static Vector3 CameraMove()
     {
@@ -97,7 +130,7 @@ public class RoamManager : MonoBehaviour
         cameraMove.target = t;
     }
     
-    #endregion
+#endregion
 }
 
 public enum RoamMode

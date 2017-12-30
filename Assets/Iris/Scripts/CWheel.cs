@@ -36,7 +36,6 @@ public class CWheel : MonoBehaviour,ICInfo
         target = t;
 
         //初始化姿态
-        print(target);
         oriPos = tr.position = target.up*0 + target.position;
         oriRot = tr.rotation = target.rotation;
 

@@ -9,11 +9,13 @@ public class GameManager : MonoBehaviour
     public GameObject CoreCube;//核心
     public GameObject choosedObject;//被选中的物体
     public Collider plane;
+    public int deleteWaitFrames = 40;
 
     //私有变量
     private List<Rigidbody> rigidbodys;
     private List<Vector3> position;
     private List<Quaternion> rotation;
+    private int m_deleteWait;
 
     //加速变量
     Camera mainCam;
@@ -25,6 +27,7 @@ public class GameManager : MonoBehaviour
         rigidbodys = new List<Rigidbody>();
         position = new List<Vector3>();
         rotation = new List<Quaternion>();
+        m_deleteWait = deleteWaitFrames;
 
         //加速变量初始化
         mainCam = Camera.main;
@@ -39,61 +42,8 @@ public class GameManager : MonoBehaviour
         Gizmos.DrawLine(ray.origin, ray.origin + ray.direction);
     }
     Ray ray;
-    /*private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            _ToggleStatus();
-        }
-        ray = mainCam.ScreenPointToRay(Input.mousePosition);
-        RaycastHit[] info = Physics.RaycastAll(ray);
-        for (int i = 0; i < info.Length; ++i)
-        {
-            bool breakNow = false;
-            switch (info[i].collider.tag)
-            {
-                case "Body":
-                    {
-                        if (Input.GetKey(KeyCode.X) || Input.GetKeyDown(KeyCode.X))
-                        {
-                            _Destroy(info[i].rigidbody);
-                        }
-                        breakNow = true;
-                    }
-                    break;
-                case "Connection":
-                    {
-                        if (Input.GetMouseButtonDown(0) && !playing)
-                        {
-                            _Spawn(info[i], info[i].collider.transform.up, info[i].transform.position);
-                        }
-                        breakNow = true;
-                    }
-                    break;
-                case "Wheel":
-                    {
-
-
-                        if (Input.GetKeyDown(KeyCode.F))
-                        {
-                            info[i].rigidbody.GetComponent<CWheel>()._ToggleTurn();
-                        }
-                        else if (Input.GetKey(KeyCode.X) || Input.GetKeyDown(KeyCode.X))
-                        {
-                            _Destroy(info[i].rigidbody);
-                        }
-                        breakNow = true;
-                    }
-                    break;
-            }
-            if (breakNow)
-            {
-                break;
-            }
-        }
-    }*/
     public GameObject mark;
-    private void Update()
+    private void FixedUpdate()
     {
         //获取点击物体
         ray = mainCam.ScreenPointToRay(Input.mousePosition);
@@ -105,12 +55,18 @@ public class GameManager : MonoBehaviour
             {
                 for (int i = 0; i < info.Length; ++i)
                 {
-                    if (info[i].collider.tag == "Connection" && choosedObject.name !="Tyre")
+                    //之所以不用Switch 是因为不方便跳出for循环
+                    string _tag = info[i].collider.tag;
+                    if (_tag == "Body")
+                    {
+                        break;
+                    }
+                    if (_tag == "Connection" && choosedObject.name != "Tyre")
                     {
                         Instantiate(choosedObject, this.transform).GetComponent<ICInfo>()._Spawn(info[i].collider.transform);
                         break;
                     }
-                    else if(info[i].collider.tag == "HingeConnection" && choosedObject.name == "Tyre")
+                    else if (_tag == "HingeConnection" && choosedObject.name == "Tyre")
                     {
                         Instantiate(choosedObject, this.transform).GetComponent<ICInfo>()._Spawn(info[i].collider.transform);
                         break;
@@ -118,7 +74,19 @@ public class GameManager : MonoBehaviour
                     }
                 }
             }
-            else if (Input.GetKey(KeyCode.X) || Input.GetKeyDown(KeyCode.X))//删除一个
+            else if (Input.GetKeyDown(KeyCode.X))//删除一个
+            {
+                for (int i = 0; i < info.Length; ++i)
+                {
+                    if (info[i].collider.tag == "Body")
+                    {
+                        info[i].rigidbody.GetComponent<ICInfo>()._Destroy();
+                        break;
+                    }
+                }
+                m_deleteWait = deleteWaitFrames;
+            }
+            else if (Input.GetKey(KeyCode.X) && --m_deleteWait < 0)//删除多个
             {
                 for (int i = 0; i < info.Length; ++i)
                 {

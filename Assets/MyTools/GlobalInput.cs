@@ -60,7 +60,7 @@ public class GlobalInput : MonoBehaviour {
     private static bool freeView = false;
     public static bool GetViewMode()
     {
-        if (Input.GetMouseButtonDown(2) || Input.GetKeyDown(KeyCode.Z))
+        if (Input.GetMouseButtonDown(2) || Input.GetKeyDown(KeyCode.Alpha1))
         {
             return freeView = !freeView;
         }
@@ -73,7 +73,7 @@ public class GlobalInput : MonoBehaviour {
     private static bool freeMoveMode = false;
     public static bool? GetFreeMoveMode()
     {
-        if (Input.GetKeyDown(KeyCode.C) || Input.GetMouseButtonDown(1))
+        if (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetMouseButtonDown(1))
         {
             return freeMoveMode = !freeMoveMode;
         }
@@ -98,7 +98,7 @@ public class GlobalInput : MonoBehaviour {
     private static bool TraceMode = false;
     public static bool? GetTraceMode()//跟踪旋转（A旋转）
     {
-        if (Input.GetKeyDown(KeyCode.X))
+        if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             return TraceMode = !TraceMode;
         }
